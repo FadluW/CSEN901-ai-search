@@ -1,9 +1,9 @@
 package de.giuberlin.search;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.Test;
 
 import de.giuberlin.search.NodePath.Direction;
 
@@ -13,7 +13,7 @@ public class NodePathTest {
     public void shouldAddZeroCostNodeAndPrintCorrectly() {
         NodePath testPath = new NodePath();
         testPath.add(Direction.DOWN);
-
+        
         assertThat(testPath.toString(), is("down;0;1"));
     }
     
