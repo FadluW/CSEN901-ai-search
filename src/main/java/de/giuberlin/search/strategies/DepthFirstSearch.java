@@ -20,4 +20,8 @@ public class DepthFirstSearch implements Strategy {
         throw new UnsupportedOperationException("Unimplemented method 'displayQueue'");
     }
 
+    @Override
+    public boolean isInformed() {
+        return false;
+    }
 }

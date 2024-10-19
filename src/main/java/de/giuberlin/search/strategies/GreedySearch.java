@@ -8,6 +8,7 @@ public class GreedySearch implements Strategy {
     GreedySearch(Heuristic h) {
         this.h = h;
     }
+    
     @Override
     public void enqueue() {
         // TODO Auto-generated method stub
@@ -26,4 +27,8 @@ public class GreedySearch implements Strategy {
         throw new UnsupportedOperationException("Unimplemented method 'displayQueue'");
     }
 
+    @Override
+    public boolean isInformed() {
+        return true;
+    }
 }
