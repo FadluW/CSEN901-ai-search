@@ -5,6 +5,9 @@ Prerequisites:
 - Maven
 - Java
 
+## LaTex
+Use extension LaTex Workshop on Visual Studio Code.
+
 ## Building Project and Running Unit Tests
 In order to compile the code and run the automated tests using Maven Surefire and JUnit 5, run:
 ```bash

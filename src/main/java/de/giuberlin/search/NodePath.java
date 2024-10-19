@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class NodePath {
-    private ArrayList<Direction> plan = new ArrayList<>();
+    private final ArrayList<Direction> plan = new ArrayList<>();
     private long cost = 0;
 
     NodePath() {}
@@ -32,7 +32,7 @@ public class NodePath {
         RIGHT("right");
 
         
-        private String stringValue;
+        private final String stringValue;
         Direction(String s) {
             this.stringValue = s;
         }
