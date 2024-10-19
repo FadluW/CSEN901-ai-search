@@ -1,4 +1,4 @@
-package de.giuberlin.search;
+package de.giuberlin;
 
 public abstract class GenericSearch {
 

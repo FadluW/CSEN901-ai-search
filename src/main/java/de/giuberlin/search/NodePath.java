@@ -29,7 +29,8 @@ public class NodePath {
         UP("up"),
         DOWN("down"),
         LEFT("left"),
-        RIGHT("right");
+        RIGHT("right"),
+        TUNNEL("tunnel");
 
         
         private final String stringValue;
