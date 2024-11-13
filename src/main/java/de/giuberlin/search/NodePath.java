@@ -3,26 +3,38 @@ package de.giuberlin.search;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class NodePath {
-    private final ArrayList<Direction> plan = new ArrayList<>();
+public class NodePath implements Cloneable {
+    private ArrayList<Direction> plan = new ArrayList<>();
     private long cost = 0;
 
     NodePath() {}
 
-    public void add(Direction direction, int cost) {
+    private NodePath(ArrayList<Direction> plan, long cost) {
+        this.plan = plan;
+        this.cost = cost;
+    }
+
+    public NodePath add(Direction direction, Integer cost) {
         this.plan.add(direction);
         this.cost += cost;
+        return this;
     }
     
-    public void add(Direction direction) {
-        this.add(direction, 0);
+    public NodePath add(Direction direction) {
+        return this.add(direction, 0);
     }
 
     @Override
     public String toString() {
-        return plan.stream().map(Object::toString).collect(Collectors.joining(",")) + ";" + 
+        return plan.stream().map(Direction::toString).collect(Collectors.joining(",")) + ";" + 
             cost + ";" + 
             plan.size();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public NodePath clone() {
+        return new NodePath((ArrayList<Direction>) this.plan.clone(), cost);
     }
 
     public enum Direction {

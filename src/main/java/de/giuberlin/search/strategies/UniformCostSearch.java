@@ -1,15 +1,17 @@
 package de.giuberlin.search.strategies;
 
+import de.giuberlin.search.SearchNode;
+
 public class UniformCostSearch implements Strategy {
 
     @Override
-    public void enqueue() {
+    public void enqueue(SearchNode node) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'enqueue'");
     }
 
     @Override
-    public void dequeue() {
+    public SearchNode dequeue() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'dequeue'");
     }

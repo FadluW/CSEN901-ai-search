@@ -1,9 +1,26 @@
 package de.giuberlin;
 
-public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
+import de.giuberlin.search.strategies.Strategies;
 
-    public static String solve() {
-        return "Solution";
+public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
+    
+    DeliverySearch(Strategies strategyCode) {
+        super(strategyCode);
+    }
+
+    public static DeliverySearch usingCode(String strategyCode) {
+        Strategies mappedStrategy;
+        switch (strategyCode) {
+            case "BF":
+                mappedStrategy = Strategies.BF;
+                break;
+            // TODO: add rest of mappings
+            default:
+                mappedStrategy = Strategies.BF;
+                break;
+        }
+
+        return new DeliverySearch(mappedStrategy);
     }
 
     @Override
