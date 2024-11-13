@@ -2,7 +2,7 @@ package de.giuberlin.search.strategies;
 
 import de.giuberlin.search.strategies.heuristics.HeuristicImpl1;
 
-public enum Strategies {
+public enum StrategyCode {
     BF(new BreadthFirstSearch()),
     DF(new DepthFirstSearch()),
     ID(new IterativeDeepeningSearch()),
@@ -14,7 +14,7 @@ public enum Strategies {
 
     private Strategy strategy;
 
-    Strategies(Strategy strategy) {
+    StrategyCode(Strategy strategy) {
         this.strategy = strategy;
     }
 

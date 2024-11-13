@@ -2,19 +2,13 @@ package de.giuberlin;
 
 import de.giuberlin.exceptions.GoalNotFoundException;
 import de.giuberlin.search.SearchNode;
-import de.giuberlin.search.strategies.Strategies;
 import de.giuberlin.search.strategies.Strategy;
 import grid.GridObject;
 import grid.types.Tunnel;
 
 public abstract class GenericSearch {
-    private Strategy searchStrategy;
 
-    GenericSearch(Strategies strategyCode) {
-        this.searchStrategy = strategyCode.getStrategy();
-    }
-
-    public String getPathStartingFrom(GridObject startingCell) {
+    public String getPathStartingFrom(GridObject startingCell, Strategy searchStrategy) {
         SearchNode nodeToExpand = new SearchNode(startingCell);
         searchStrategy.enqueue(nodeToExpand);
         

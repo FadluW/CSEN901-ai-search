@@ -1,5 +1,8 @@
 package de.giuberlin;
 
+import de.giuberlin.search.strategies.Strategy;
+import grid.GridObject;
+
 public interface DeliverySearchInterface {
     /**
      * Generates a random grid with at least one customer and one store.
@@ -16,7 +19,7 @@ public interface DeliverySearchInterface {
      * 
      * @return String with the following format plan;cost;nodesExpanded
      */
-    public String path();
+    public String path(Strategy searchStrategy, GridObject start, GridObject goal);
     
     
     /**
