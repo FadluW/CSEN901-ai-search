@@ -7,14 +7,14 @@ public class NodePath implements Cloneable {
     private ArrayList<Direction> plan = new ArrayList<>();
     private long cost = 0;
 
-    NodePath() {}
+    public NodePath() {}
 
     private NodePath(ArrayList<Direction> plan, long cost) {
         this.plan = plan;
         this.cost = cost;
     }
 
-    public NodePath add(Direction direction, Integer cost) {
+    public NodePath add(Direction direction, int cost) {
         this.plan.add(direction);
         this.cost += cost;
         return this;
