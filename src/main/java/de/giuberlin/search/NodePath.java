@@ -24,6 +24,10 @@ public class NodePath implements Cloneable {
         return this.add(direction, 0);
     }
 
+    public long getCost() {
+        return cost;
+    }
+
     @Override
     public String toString() {
         return plan.stream().map(Direction::toString).collect(Collectors.joining(",")) + ";" + 

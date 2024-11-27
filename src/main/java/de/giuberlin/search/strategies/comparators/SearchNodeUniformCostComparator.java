@@ -8,7 +8,7 @@ public class SearchNodeUniformCostComparator implements Comparator<SearchNode> {
 
     @Override
     public int compare(SearchNode node1, SearchNode node2) {
-        int costCompare = Integer.compare(node1.getCostToExpand(), node2.getCostToExpand());
+        int costCompare = Long.compare(node1.getPath().getCost(), node2.getPath().getCost());
         if (costCompare != 0) {
             return costCompare;
         }
