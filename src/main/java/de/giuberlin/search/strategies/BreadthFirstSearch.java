@@ -1,19 +1,19 @@
 package de.giuberlin.search.strategies;
+import java.util.LinkedList;
 
 import de.giuberlin.search.SearchNode;
 
 public class BreadthFirstSearch implements Strategy {
+    LinkedList<SearchNode> queue = new LinkedList<>();
 
     @Override
     public void enqueue(SearchNode node) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'enqueue'");
+        queue.add(node);
     }
 
     @Override
     public SearchNode dequeue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'dequeue'");
+        return queue.poll();
     }
 
     @Override

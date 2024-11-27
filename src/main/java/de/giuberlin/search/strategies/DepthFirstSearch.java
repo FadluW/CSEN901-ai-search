@@ -2,18 +2,19 @@ package de.giuberlin.search.strategies;
 
 import de.giuberlin.search.SearchNode;
 
+import java.util.LinkedList;
+
 public class DepthFirstSearch implements Strategy {
+    LinkedList<SearchNode> stack = new LinkedList<>();
 
     @Override
     public void enqueue(SearchNode node) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'enqueue'");
+        stack.push(node);
     }
 
     @Override
     public SearchNode dequeue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'dequeue'");
+        return stack.poll();
     }
 
     @Override
