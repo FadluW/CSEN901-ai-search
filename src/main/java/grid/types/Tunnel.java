@@ -1,7 +1,8 @@
 package grid.types;
 
-import grid.GridObject;
-
 public class Tunnel extends GridObject {
-    
+
+    public Tunnel(int x, int y) {
+        super(x, y);
+    }
 }

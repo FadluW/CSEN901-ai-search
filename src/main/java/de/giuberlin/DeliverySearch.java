@@ -2,13 +2,13 @@ package de.giuberlin;
 
 import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.search.strategies.StrategyCode;
-import grid.GridObject;
+import grid.types.GridObject;
 
 public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
 
     @Override
     public String GenGrid() {
-        // TODO Auto-generated method stub
+
         throw new UnsupportedOperationException("Unimplemented method 'GenGrid'");
     }
 
@@ -22,7 +22,7 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
     public String plan(String initialState, String traffic, String strategy, Boolean visualize) {
         // Create grid to use
 
-        // Add traffic between each nodes
+        // Add traffic between each node
 
         // Map search strategy
         Strategy searchStrategy = StrategyCode.valueOf(strategy.toUpperCase()).getStrategy();

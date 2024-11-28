@@ -1,13 +1,22 @@
-package grid;
+package grid.types;
 
 import java.awt.Point;
 
 public abstract class GridObject {
     Point coords;
+    boolean isVisited;
 
+    public GridObject(int x, int y) {
+        coords = new Point(x, y);
+        isVisited = false;
+    }
 
     public boolean isGoal() {
         return false;
+    }
+
+    public boolean isVisited() {
+        return isVisited;
     }
 
     public int manhattanDistanceTo(GridObject object2) {
