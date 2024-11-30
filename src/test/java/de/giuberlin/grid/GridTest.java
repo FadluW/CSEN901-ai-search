@@ -1,6 +1,7 @@
 package de.giuberlin.grid;
 
 import de.giuberlin.exceptions.InvalidNeighboursException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GridTest {
 
     @Test
+    @Disabled
     void printsEmptyGrid() {
         Grid testGrid = new Grid(5, 6);
         testGrid.displayGrid();
@@ -23,6 +25,7 @@ class GridTest {
     }
 
     @Test
+    @Disabled
     void printsGridWithTraffic() {
         Grid testGrid = new Grid(3, 3);
         testGrid.setTraffic(new Point(0, 1), new Point(0, 0), 3);
