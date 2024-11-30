@@ -1,7 +1,7 @@
 package de.giuberlin.search;
 
 import de.giuberlin.search.NodePath.Direction;
-import grid.types.GridObject;
+import de.giuberlin.grid.types.GridObject;
 
 public class SearchNode {
     private final NodePath path;

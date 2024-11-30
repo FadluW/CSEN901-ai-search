@@ -1,4 +1,4 @@
-package grid.types;
+package de.giuberlin.grid.types;
 
 public class EmptyGridObject extends GridObject{
 

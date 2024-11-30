@@ -2,7 +2,7 @@ package de.giuberlin;
 
 import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.search.strategies.StrategyCode;
-import grid.types.GridObject;
+import de.giuberlin.grid.types.GridObject;
 
 public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
 

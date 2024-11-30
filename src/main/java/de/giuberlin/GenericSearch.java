@@ -3,8 +3,8 @@ package de.giuberlin;
 import de.giuberlin.exceptions.GoalNotFoundException;
 import de.giuberlin.search.SearchNode;
 import de.giuberlin.search.strategies.Strategy;
-import grid.types.GridObject;
-import grid.types.Tunnel;
+import de.giuberlin.grid.types.GridObject;
+import de.giuberlin.grid.types.Tunnel;
 
 public abstract class GenericSearch {
 
