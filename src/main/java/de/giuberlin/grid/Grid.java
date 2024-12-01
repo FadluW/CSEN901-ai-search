@@ -20,6 +20,10 @@ public class Grid {
         return grid[coords.x][coords.y];
     }
 
+    public void setGridObject(Point coords, GridObject gridObject){
+        grid[coords.x][coords.y] = gridObject;
+    }
+
     public void setTraffic(Point source, Point destination, int traffic) {
         if (source.x == destination.x) {
             int heightDiff = source.y - destination.y;
