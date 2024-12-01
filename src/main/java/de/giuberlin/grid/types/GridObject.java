@@ -6,9 +6,9 @@ import de.giuberlin.utilities.TerminalColors;
 import java.awt.Point;
 
 public abstract class GridObject {
-    private Point coords;
-    private boolean isVisited;
-    private GridNeighbours neighbours;
+    protected Point coords;
+    protected boolean isVisited;
+    protected GridNeighbours neighbours;
 
     public GridObject(int x, int y) {
         coords = new Point(x, y);

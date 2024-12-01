@@ -150,39 +150,47 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
 
         grid = new Grid(m, n);
         String customersString = parts.pop();
-        LinkedList<String> customersList = new LinkedList<>(Arrays.asList(customersString.split(",")));
-        for (int i = 0; i < p; i++) {
-            int x = Integer.parseInt(customersList.pop());
-            int y = Integer.parseInt(customersList.pop());
-            Customer customer = new Customer(x, y);
-            grid.setGridObject(new Point(x, y), customer);
-        }
+        addCustomers(customersString, p);
 
         String storesString = parts.pop();
-        LinkedList<String> storesList = new LinkedList<>(Arrays.asList(storesString.split(",")));
-        for (int i = 0; i < s; i++) {
-            int x = Integer.parseInt(storesList.pop());
-            int y = Integer.parseInt(storesList.pop());
-            Store store = new Store(x, y);
-            grid.setGridObject(new Point(x, y), store);
-        }
+        addStores(storesString, s);
 
         String tunnelsString = parts.pop();
+        addTunnels(tunnelsString);
+    }
+
+    private void addCustomers(String customersString, int numCustomers) {
+        LinkedList<String> customersList = new LinkedList<>(Arrays.asList(customersString.split(",")));
+        for (int i = 0; i < numCustomers; i++) {
+            int x = Integer.parseInt(customersList.pop());
+            int y = Integer.parseInt(customersList.pop());
+            
+            grid.setCustomer(new Point(x, y));
+        }
+    }
+
+    private void addStores(String storesString, int numStores) {
+        LinkedList<String> storesList = new LinkedList<>(Arrays.asList(storesString.split(",")));
+        for (int i = 0; i < numStores; i++) {
+            int x = Integer.parseInt(storesList.pop());
+            int y = Integer.parseInt(storesList.pop());
+
+            grid.setStore(new Point(x, y));
+        }
+    }
+
+    private void addTunnels(String tunnelsString) {
         LinkedList<String> tunnelsList = new LinkedList<>(Arrays.asList(tunnelsString.split(",")));
         while (!tunnelsList.isEmpty()) {
             int tunnel1x = Integer.parseInt(tunnelsList.pop());
             int tunnel1y = Integer.parseInt(tunnelsList.pop());
             int tunnel2x = Integer.parseInt(tunnelsList.pop());
             int tunnel2y = Integer.parseInt(tunnelsList.pop());
-            Tunnel firstTunnel = new Tunnel(tunnel1x, tunnel1y);
-            Tunnel secondTunnel = new Tunnel(tunnel2x, tunnel2y);
-            firstTunnel.assignOtherEnd(secondTunnel);
-            secondTunnel.assignOtherEnd(firstTunnel);
-
-            grid.setGridObject(new Point(tunnel1x, tunnel1y), firstTunnel);
-            grid.setGridObject(new Point(tunnel2x, tunnel2y), secondTunnel);
+            Point firstTunnelCoords = new Point(tunnel1x, tunnel1y);
+            Point secondTunnelCoords = new Point(tunnel2x, tunnel2y);
+            
+            grid.setTunnelExits(firstTunnelCoords, secondTunnelCoords);
         }
-
     }
 
     private void addTraffic(String traffic){
