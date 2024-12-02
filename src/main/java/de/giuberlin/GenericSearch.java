@@ -3,8 +3,8 @@ package de.giuberlin;
 import de.giuberlin.exceptions.GoalNotFoundException;
 import de.giuberlin.search.SearchNode;
 import de.giuberlin.search.strategies.Strategy;
-import grid.GridObject;
-import grid.types.Tunnel;
+import de.giuberlin.grid.types.GridObject;
+import de.giuberlin.grid.types.Tunnel;
 
 public abstract class GenericSearch {
 
@@ -25,6 +25,7 @@ public abstract class GenericSearch {
 
     private void expandNode(SearchNode node) {
         // TODO: expand node in all 4 directions + tunnel
+        // TODO: skip if already visited
         if (node.getGridObject() instanceof Tunnel) {
             // Expand Tunnel
         }

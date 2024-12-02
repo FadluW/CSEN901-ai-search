@@ -1,7 +1,7 @@
 package de.giuberlin;
 
 import de.giuberlin.search.strategies.Strategy;
-import grid.GridObject;
+import de.giuberlin.grid.types.GridObject;
 
 public interface DeliverySearchInterface {
     /**
