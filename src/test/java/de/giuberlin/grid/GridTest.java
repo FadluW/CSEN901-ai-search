@@ -28,10 +28,10 @@ class GridTest {
     @Disabled
     void printsGridWithTraffic() {
         Grid testGrid = new Grid(3, 3);
-        testGrid.setTraffic(new Point(0, 1), new Point(0, 0), 3);
-        testGrid.setTraffic(new Point(1, 1), new Point(2, 1), 5);
         testGrid.setCustomer(new Point(1, 1));
         testGrid.setStore(new Point(2, 2));
+        testGrid.setTraffic(new Point(0, 1), new Point(0, 0), 3);
+        testGrid.setTraffic(new Point(1, 1), new Point(2, 1), 5);
 
         testGrid.displayGrid();
     }
