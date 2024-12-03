@@ -11,16 +11,32 @@ import de.giuberlin.grid.types.traffic.VerticalTrafficSegment;
 import de.giuberlin.search.NodePath;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Grid {
     private GridObject[][] grid;
+    private final ArrayList<Store> stores = new ArrayList<>();
+    private final ArrayList<Customer> customers = new ArrayList<>();
 
     public Grid(int width, int height) {
         initializeEmptyGrid(width, height);
     }
 
     public GridObject getGridObject(Point coords) {
-        return grid[coords.x][coords.y];
+        return grid[coords.y][coords.x];
+    }
+
+    public ArrayList<Store> getStores() {
+        return stores;
+    }
+
+    public ArrayList<Customer> getCustomers() {
+        return customers;
+    }
+
+    public int getSize() {
+        return grid.length * grid[0].length;
     }
 
     public void displayGrid() {
@@ -35,11 +51,15 @@ public class Grid {
     }
 
     public void setStore(Point coords) {
-        setGridObject(new Store(coords.x, coords.y), coords);
+        Store store = new Store(coords.x, coords.y);
+        stores.add(store);
+        setGridObject(store, coords);
     }
 
     public void setCustomer(Point coords) {
-        setGridObject(new Customer(coords.x, coords.y), coords);
+        Customer customer = new Customer(coords.x, coords.y);
+        customers.add(customer);
+        setGridObject(customer, coords);
     }
 
     public void setTunnelExits(Point exit1, Point exit2) {
@@ -47,7 +67,7 @@ public class Grid {
             throw new IllegalArgumentException("Tunnel exits cannot be on the same point!");
         }
 
-        Tunnel tunnel1 = new Tunnel(exit1.x, exit2.y);
+        Tunnel tunnel1 = new Tunnel(exit1.x, exit1.y);
         Tunnel tunnel2 = tunnel1.createAndLinkOtherExitAt(exit2);
 
         setGridObject(tunnel1, exit1);
@@ -84,6 +104,12 @@ public class Grid {
         }
 
         throw new InvalidNeighboursException(source, destination);
+    }
+
+    public void clearAllVisitedGridObjects() {
+        Arrays.stream(grid).forEach((gridObjects ->
+                Arrays.stream(gridObjects).forEach((gridObject ->
+                        gridObject.setIsVisited(false)))));
     }
 
     private void initializeEmptyGrid(int width, int height) {
@@ -142,7 +168,7 @@ public class Grid {
         System.out.print("\n");
         for (int column = 0; column < grid[row].length; column++) {
             GridObject southNeighbour = grid[row][column].getNeighbours().getNeighbour(NodePath.Direction.DOWN);
-            System.out.print(((southNeighbour == null) ? " " : grid[row][column].getNeighbours().getCost(NodePath.Direction.DOWN)) + "           ");
+            System.out.print(((southNeighbour == null) ? " " : grid[row][column].getNeighbours().getCost(NodePath.Direction.DOWN)) + "             ");
         }
         System.out.print("\n");
         printVerticalPadding(row);
@@ -151,7 +177,7 @@ public class Grid {
     private void printVerticalPadding(int row) {
         for (int column = 0; column < grid[row].length; column++) {
             GridObject southNeighbour = grid[row][column].getNeighbours().getNeighbour(NodePath.Direction.DOWN);
-            System.out.print(((southNeighbour == null) ? " " : "|") + "           ");
+            System.out.print(((southNeighbour == null) ? " " : "|") + "             ");
         }
     }
 
@@ -161,21 +187,21 @@ public class Grid {
 
             GridObject southNeighbour = grid[row][column].getNeighbours().getNeighbour(NodePath.Direction.RIGHT);
             if (southNeighbour == null) {
-                System.out.print("          ");
+                System.out.print("             ");
             } else {
-                System.out.print(" --- " + grid[row][column].getNeighbours().getCost(NodePath.Direction.RIGHT) + " --- ");
+                System.out.print("  --  " + grid[row][column].getNeighbours().getCost(NodePath.Direction.RIGHT) + "  --  ");
             }
         }
     }
 
     private void assertGridLocationEmpty(Point coords) {
-        if (!(grid[coords.x][coords.y] instanceof EmptyGridObject)) {
+        if (!(grid[coords.y][coords.x] instanceof EmptyGridObject)) {
             throw new IllegalArgumentException("Grid coordinates (" + coords.x + ", " + coords.y + ") already occupied");
         }
     }
 
     private void assertWithinGridBounds(Point coords) {
-        if (coords.x >= grid.length || coords.y >= grid[0].length) {
+        if (coords.y >= grid.length || coords.x >= grid[0].length) {
             throw new IllegalArgumentException("Grid coordinates (" + coords.x + ", " + coords.y + ") out of bounds");
         }
     }
@@ -184,6 +210,6 @@ public class Grid {
         assertWithinGridBounds(coords);
         assertGridLocationEmpty(coords);
 
-        grid[coords.x][coords.y] = obj;
+        grid[coords.y][coords.x] = obj;
     }
 }

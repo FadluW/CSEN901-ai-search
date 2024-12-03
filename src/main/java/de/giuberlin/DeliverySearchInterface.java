@@ -1,5 +1,8 @@
 package de.giuberlin;
 
+import de.giuberlin.grid.types.Customer;
+import de.giuberlin.grid.types.Store;
+import de.giuberlin.search.NodePath;
 import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.grid.types.GridObject;
 
@@ -14,12 +17,11 @@ public interface DeliverySearchInterface {
     public String GenGrid();
 
     /**
-     * Uses the given search strategy to find the path for a truck to reach a given destination. 
-     * See also {@link de.giuberlin.search.NodePath NodePath}.
+     * Uses the given search strategy to find the path for a truck to reach a given destination.
      * 
-     * @return String with the following format plan;cost;nodesExpanded
+     * @return {@link de.giuberlin.search.NodePath NodePath}
      */
-    public String path(Strategy searchStrategy, GridObject start, GridObject goal);
+    public NodePath path(Store start, Customer goal, Strategy searchStrategy, boolean visualize);
     
     
     /**

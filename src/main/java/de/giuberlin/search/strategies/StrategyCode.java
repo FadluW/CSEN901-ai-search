@@ -11,7 +11,7 @@ public enum StrategyCode {
     AS2(new AStarSearch2());
 
 
-    private Strategy strategy;
+    private final Strategy strategy;
 
     StrategyCode(Strategy strategy) {
         this.strategy = strategy;

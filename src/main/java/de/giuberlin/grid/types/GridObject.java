@@ -32,8 +32,12 @@ public abstract class GridObject {
         return isVisited;
     }
 
+    public void setIsVisited(boolean isVisited) {
+        this.isVisited = isVisited;
+    }
+
     public String toString() {
-        return ((isVisited) ? TerminalColors.YELLOW : "") + "O" + TerminalColors.RESET;
+        return ((isVisited) ? TerminalColors.YELLOW : "") + "+" + TerminalColors.RESET;
     }
 
     public int manhattanDistanceTo(GridObject object2) {

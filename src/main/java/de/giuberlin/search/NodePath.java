@@ -28,6 +28,10 @@ public class NodePath implements Cloneable {
         return cost;
     }
 
+    public int getDepth() {
+        return plan.size();
+    }
+
     @Override
     public String toString() {
         return plan.stream().map(Direction::toString).collect(Collectors.joining(",")) + ";" + 
