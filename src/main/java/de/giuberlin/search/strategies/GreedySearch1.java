@@ -1,25 +1,32 @@
 package de.giuberlin.search.strategies;
 
+import java.util.PriorityQueue;
+
 import de.giuberlin.search.SearchNode;
 import de.giuberlin.search.strategies.heuristics.Heuristic;
 
-public class AStarSearch implements Strategy {
-    private Heuristic h;
-    
-    AStarSearch(Heuristic h) {
-        this.h = h;
-    }
+import de.giuberlin.search.strategies.comparators.SearchNodeGreedyComparator1;
 
+
+public class GreedySearch1 implements Strategy {
+    PriorityQueue<SearchNode> queue = new PriorityQueue<>(new SearchNodeGreedyComparator1());
+    // private Heuristic h;
+    
+    // GreedySearch(Heuristic h) {
+    //     this.h = h;
+    // }
+    
     @Override
     public void enqueue(SearchNode node) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'enqueue'");
+        queue.add(node);
+        
     }
 
     @Override
     public SearchNode dequeue() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'dequeue'");
+        return queue.poll();
     }
 
     @Override
