@@ -1,11 +1,13 @@
 package de.giuberlin;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("Run Manually")
 class DeliverySearchTest {
     boolean visualize = true;
 

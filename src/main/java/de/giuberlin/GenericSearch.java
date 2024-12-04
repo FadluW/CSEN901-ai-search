@@ -10,8 +10,8 @@ import de.giuberlin.grid.types.Tunnel;
 
 public abstract class GenericSearch {
     protected Grid grid;
+    protected int countNodesExpanded = 0;
     private int countNodesVisited;
-    private int countNodesExpanded = 0;
 
     public NodePath getPathStartingFrom(GridObject startingCell, GridObject goalCell, Strategy searchStrategy) {
         SearchNode nodeToExpand = new SearchNode(startingCell);
@@ -38,7 +38,6 @@ public abstract class GenericSearch {
 
         while((nodeToExpand = searchStrategy.dequeue()) != null) {
             if (nodeToExpand.getGridObject() == goalCell) {
-                nodeToExpand.getPath().setNodesExpanded(countNodesExpanded);
                 return nodeToExpand.getPath();
             }
 

@@ -10,7 +10,6 @@ public class AStarSearch2 implements Strategy {
 
     @Override
     public void enqueue(SearchNode node) {
-      
         queue.add(node);
     }
 
@@ -21,12 +20,23 @@ public class AStarSearch2 implements Strategy {
 
     @Override
     public void displayQueue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayQueue'");
+        StringBuilder stringBuilder = new StringBuilder("Queue: ");
+        queue.forEach(searchNode -> stringBuilder
+                .append("(")
+                .append(searchNode.getGridObject().getCoords().x)
+                .append(", ")
+                .append(searchNode.getGridObject().getCoords().y)
+                .append(") "));
+        System.out.println(stringBuilder);
     }
 
     @Override
     public boolean isInformed() {
         return true;
+    }
+
+    @Override
+    public void reset() {
+        queue.clear();
     }
 }

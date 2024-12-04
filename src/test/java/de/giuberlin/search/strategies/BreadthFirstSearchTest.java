@@ -1,5 +1,6 @@
 package de.giuberlin.search.strategies;
 
+import de.giuberlin.grid.types.EmptyGridObject;
 import de.giuberlin.search.NodePath;
 import de.giuberlin.search.SearchNode;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,10 +22,11 @@ class BreadthFirstSearchTest {
     void shouldEnqueueNodes() {
         int orderDiscovered = -1;
 
-        SearchNode node1 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
-        SearchNode node2 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
-        SearchNode node3 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
-        SearchNode node4 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
+
+        SearchNode node1 = new SearchNode(new EmptyGridObject(0, 0), ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
+        SearchNode node2 = new SearchNode(new EmptyGridObject(0, 1), ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
+        SearchNode node3 = new SearchNode(new EmptyGridObject(1, 1), ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
+        SearchNode node4 = new SearchNode(new EmptyGridObject(0, 2), ++orderDiscovered, new NodePath(), NodePath.Direction.UP);
 
         breadthFirstSearch.enqueue(node1);
         breadthFirstSearch.enqueue(node2);
@@ -38,10 +40,10 @@ class BreadthFirstSearchTest {
     void shouldEnqueueNodesWithPathCosts() {
         int orderDiscovered = -1;
 
-        SearchNode node1 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 2);
-        SearchNode node2 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 5);
-        SearchNode node3 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 3);
-        SearchNode node4 = new SearchNode(null, ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 1);
+        SearchNode node1 = new SearchNode(new EmptyGridObject(0, 1), ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 2);
+        SearchNode node2 = new SearchNode(new EmptyGridObject(1, 1), ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 5);
+        SearchNode node3 = new SearchNode(new EmptyGridObject(0, 2), ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 3);
+        SearchNode node4 = new SearchNode(new EmptyGridObject(1, 0), ++orderDiscovered, new NodePath(), NodePath.Direction.UP, 1);
 
         breadthFirstSearch.enqueue(node1);
         breadthFirstSearch.enqueue(node2);
