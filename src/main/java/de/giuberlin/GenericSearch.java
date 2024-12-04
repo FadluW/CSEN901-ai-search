@@ -10,13 +10,14 @@ import de.giuberlin.grid.types.Tunnel;
 
 public abstract class GenericSearch {
     protected Grid grid;
-    protected int countNodesExpanded = 0;
+    protected int countNodesExpanded;
     private int countNodesVisited;
 
     public NodePath getPathStartingFrom(GridObject startingCell, GridObject goalCell, Strategy searchStrategy) {
         SearchNode nodeToExpand = new SearchNode(startingCell);
         searchStrategy.enqueue(nodeToExpand);
         countNodesVisited = 1;
+        countNodesExpanded = 0;
 
         while((nodeToExpand = searchStrategy.dequeue()) != null) {
             if (nodeToExpand.getGridObject() == goalCell) {
@@ -33,6 +34,8 @@ public abstract class GenericSearch {
         SearchNode nodeToExpand = new SearchNode(startingCell);
         searchStrategy.enqueue(nodeToExpand);
         countNodesVisited = 1;
+        countNodesExpanded = 0;
+
         grid.displayGrid();
         searchStrategy.displayQueue();
 

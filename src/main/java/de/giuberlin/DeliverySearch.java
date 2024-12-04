@@ -7,6 +7,7 @@ import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.grid.types.Store;
 import de.giuberlin.grid.types.Tunnel;
 import de.giuberlin.search.NodePath;
+import de.giuberlin.search.strategies.InformedSearchStrategy;
 import de.giuberlin.search.strategies.IterativeDeepeningSearch;
 import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.search.strategies.StrategyCode;
@@ -52,6 +53,9 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
                 NodePath path;
                 if (searchStrategy instanceof IterativeDeepeningSearch) {
                     path = iterativeDeepeningPath(store, customer, (IterativeDeepeningSearch) searchStrategy, visualize);
+                } else if (searchStrategy instanceof InformedSearchStrategy) {
+                    ((InformedSearchStrategy) searchStrategy).initializeWithGoal(customer);
+                    path = path(store, customer, searchStrategy, visualize);
                 } else {
                     path = path(store, customer, searchStrategy, visualize);
                 }

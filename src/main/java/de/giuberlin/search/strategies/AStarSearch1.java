@@ -1,15 +1,23 @@
 package de.giuberlin.search.strategies;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.search.SearchNode;
 import de.giuberlin.search.strategies.comparators.SearchNodeAStarComparator1;
 
-public class AStarSearch1 implements Strategy {
-    PriorityQueue<SearchNode> queue = new PriorityQueue<>(new SearchNodeAStarComparator1());
+public class AStarSearch1 implements InformedSearchStrategy {
+    HashSet<GridObject> visitedObjects = new HashSet<>();
+    PriorityQueue<SearchNode> queue;
 
     @Override
     public void enqueue(SearchNode node) {
+        if (!visitedObjects.add(node.getGridObject())) {
+            return;
+        }
+
         queue.add(node);
     }
 
@@ -38,5 +46,11 @@ public class AStarSearch1 implements Strategy {
     @Override
     public void reset() {
         queue.clear();
+        visitedObjects.clear();
+    }
+
+    @Override
+    public void initializeWithGoal(GridObject goal) {
+        queue = new PriorityQueue<>(new SearchNodeAStarComparator1(goal));
     }
 }

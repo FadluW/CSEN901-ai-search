@@ -1,18 +1,25 @@
 package de.giuberlin.search.strategies;
 
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
+import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.search.SearchNode;
 import de.giuberlin.search.strategies.heuristics.Heuristic;
 
 import de.giuberlin.search.strategies.comparators.SearchNodeGreedyComparator2;
 
 
-public class GreedySearch2 implements Strategy {
-    PriorityQueue<SearchNode> queue = new PriorityQueue<>(new SearchNodeGreedyComparator2());
+public class GreedySearch2 implements InformedSearchStrategy {
+    HashSet<GridObject> visitedObjects = new HashSet<>();
+    PriorityQueue<SearchNode> queue;
     
     @Override
     public void enqueue(SearchNode node) {
+        if (!visitedObjects.add(node.getGridObject())) {
+            return;
+        }
+
         queue.add(node);
     }
 
@@ -40,6 +47,12 @@ public class GreedySearch2 implements Strategy {
 
     @Override
     public void reset() {
+        visitedObjects.clear();
         queue.clear();
+    }
+
+    @Override
+    public void initializeWithGoal(GridObject goal) {
+        queue = new PriorityQueue<>(new SearchNodeGreedyComparator2(goal));
     }
 }
