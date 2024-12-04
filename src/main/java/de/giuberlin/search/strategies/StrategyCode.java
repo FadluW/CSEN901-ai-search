@@ -1,7 +1,5 @@
 package de.giuberlin.search.strategies;
 
-import de.giuberlin.search.strategies.heuristics.HeuristicImpl1;
-
 public enum StrategyCode {
     BF(new BreadthFirstSearch()),
     DF(new DepthFirstSearch()),
