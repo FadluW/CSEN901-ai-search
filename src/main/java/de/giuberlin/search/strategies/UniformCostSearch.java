@@ -32,8 +32,14 @@ public class UniformCostSearch implements Strategy {
 
     @Override
     public void displayQueue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayQueue'");
+        StringBuilder stringBuilder = new StringBuilder("Queue: ");
+        queue.forEach(searchNode -> stringBuilder
+                .append("(")
+                .append(searchNode.getGridObject().getCoords().x)
+                .append(", ")
+                .append(searchNode.getGridObject().getCoords().y)
+                .append(") "));
+        System.out.println(stringBuilder);
     }
 
     @Override

@@ -10,12 +10,13 @@ import de.giuberlin.grid.types.Tunnel;
 
 public abstract class GenericSearch {
     protected Grid grid;
-    private int nodesExpanded;
+    private int countNodesVisited;
+    private int countNodesExpanded = 0;
 
     public NodePath getPathStartingFrom(GridObject startingCell, GridObject goalCell, Strategy searchStrategy) {
         SearchNode nodeToExpand = new SearchNode(startingCell);
         searchStrategy.enqueue(nodeToExpand);
-        nodesExpanded = 1;
+        countNodesVisited = 1;
 
         while((nodeToExpand = searchStrategy.dequeue()) != null) {
             if (nodeToExpand.getGridObject() == goalCell) {
@@ -31,13 +32,13 @@ public abstract class GenericSearch {
     public NodePath getVisualizedPathStartingFrom(GridObject startingCell, GridObject goalCell, Strategy searchStrategy) {
         SearchNode nodeToExpand = new SearchNode(startingCell);
         searchStrategy.enqueue(nodeToExpand);
-        nodesExpanded = 1;
+        countNodesVisited = 1;
         grid.displayGrid();
         searchStrategy.displayQueue();
 
         while((nodeToExpand = searchStrategy.dequeue()) != null) {
             if (nodeToExpand.getGridObject() == goalCell) {
-
+                nodeToExpand.getPath().setNodesExpanded(countNodesExpanded);
                 return nodeToExpand.getPath();
             }
 
@@ -50,6 +51,7 @@ public abstract class GenericSearch {
     }
 
     private void expandNode(SearchNode node, Strategy searchStrategy) {
+        countNodesExpanded++;
         NodePath pathToNode = node.getPath();
         node.getGridObject().setIsVisited(true);
 
@@ -57,7 +59,7 @@ public abstract class GenericSearch {
         if (node.getGridObject() instanceof Tunnel) {
             // Expand Tunnel
             Tunnel tunnel = ((Tunnel) node.getGridObject()).getOtherExit();
-            SearchNode TunnelNode = new SearchNode(tunnel, nodesExpanded++, pathToNode, NodePath.Direction.TUNNEL, tunnel.getCost());
+            SearchNode TunnelNode = new SearchNode(tunnel, countNodesVisited++, pathToNode, NodePath.Direction.TUNNEL, tunnel.getCost());
             searchStrategy.enqueue(TunnelNode);
         }
 
@@ -68,7 +70,7 @@ public abstract class GenericSearch {
 
             int cost = node.getGridObject().getNeighbours().getCost(direction);
 
-            searchStrategy.enqueue(new SearchNode(nodeToExpand, nodesExpanded++, pathToNode, direction, cost));
+            searchStrategy.enqueue(new SearchNode(nodeToExpand, countNodesVisited++, pathToNode, direction, cost));
         }
     }
 }

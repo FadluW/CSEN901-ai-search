@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class NodePath implements Cloneable {
     private ArrayList<Direction> plan = new ArrayList<>();
+    private int nodesExpanded;
     private long cost = 0;
 
     public NodePath() {}
@@ -32,11 +33,15 @@ public class NodePath implements Cloneable {
         return plan.size();
     }
 
+    public void setNodesExpanded(int nodesExpanded) {
+        this.nodesExpanded = nodesExpanded;
+    }
+
     @Override
     public String toString() {
         return plan.stream().map(Direction::toString).collect(Collectors.joining(",")) + ";" + 
             cost + ";" + 
-            plan.size();
+            nodesExpanded;
     }
 
     @Override
