@@ -1,10 +1,14 @@
 package de.giuberlin;
 
+import de.giuberlin.exceptions.GoalNotFoundException;
 import de.giuberlin.grid.Grid;
 import de.giuberlin.grid.types.Customer;
 import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.grid.types.Store;
 import de.giuberlin.grid.types.Tunnel;
+import de.giuberlin.search.NodePath;
+import de.giuberlin.search.strategies.InformedSearchStrategy;
+import de.giuberlin.search.strategies.IterativeDeepeningSearch;
 import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.search.strategies.StrategyCode;
 
@@ -12,8 +16,6 @@ import java.awt.*;
 import java.util.*;
 
 public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
-
-    Grid grid;
     @Override
     public String GenGrid() {
         Random rnd = new Random();
@@ -26,106 +28,14 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
 
     }
 
-    private String genInitialState(int m, int n){
-        Random rnd = new Random();
-        int p = rnd.nextInt(1, 11);
-        int s = rnd.nextInt(1, 4);
-        int noOfTunnels = rnd.nextInt(1, 4);
-
-        HashSet<Point> occupiedPositions = new HashSet<>();
-        occupiedPositions.add(new Point(0, 0));
-        String initialValues = m + ";" + n + ";" + p + ";" + s + ";";
-        //Customers
-        StringBuilder customerPositions = new StringBuilder();
-        for (int i = 0; i < p; i++) {
-            Point position = findUnoccupiedPosition(m, n, occupiedPositions);
-            occupiedPositions.add(position);
-            customerPositions.append(position.x).append(",").append(position.y).append(",");
-        }
-        customerPositions.deleteCharAt(customerPositions.length() - 1); //removes extra ',' at the end
-        customerPositions.append(";"); //adds ; instead to signify the end of customer input
-        //Stores
-        StringBuilder storePositions = new StringBuilder();
-        for (int i = 0; i < s; i++) {
-            Point position = findUnoccupiedPosition(m, n, occupiedPositions);
-            occupiedPositions.add(position);
-            storePositions.append(position.x).append(",").append(position.y).append(",");
-        }
-        storePositions.deleteCharAt(storePositions.length() - 1); //removes extra ',' at the end
-        storePositions.append(";"); //adds ; instead to signify the end of store input
-        //Tunnels
-        StringBuilder tunnelsPositions = new StringBuilder();
-        for (int i = 0; i < noOfTunnels; i++) {
-            Point position1 = findUnoccupiedPosition(m, n, occupiedPositions);
-            occupiedPositions.add(position1);
-            Point position2 = findUnoccupiedPosition(m, n, occupiedPositions);
-            occupiedPositions.add(position2);
-
-            tunnelsPositions.append(position1.x).append(",").append(position1.y).append(",");
-            tunnelsPositions.append(position2.x).append(",").append(position2.y).append(",");
-        }
-        tunnelsPositions.deleteCharAt(storePositions.length() - 1); //removes extra ',' at the end
-        tunnelsPositions.append(";"); //adds ; instead to signify the end of tunnel input
-
-        StringBuilder initialState = new StringBuilder();
-        initialState.append(initialValues).append(customerPositions).append(storePositions).append(tunnelsPositions);
-        return initialState.toString();
-    }
-
-    private Point findUnoccupiedPosition(int width, int height, HashSet<Point> occupiedPositions){
-        Random rnd = new Random();
-        int x = 0, y = 0;
-        do {
-            x = rnd.nextInt(0, width);
-            y = rnd.nextInt(0, height);
-        } while (occupiedPositions.contains(new Point(x, y)));
-        return new Point(x, y);
-    }
-
-    private String genTraffic(int width, int height){
-        StringBuilder traffic = new StringBuilder();
-        int minTraffic = 0, maxTraffic = 4;
-        Random rnd = new Random();
-        //horizontal segments
-        for (int row = 0; row < height; row++) {
-            for (int column = 0; column < width - 1; column++) {
-                int trafficValue = rnd.nextInt(minTraffic, maxTraffic + 1);
-                traffic.append(column)
-                        .append(",")
-                        .append(row)
-                        .append(",")
-                        .append(column + 1)
-                        .append(",")
-                        .append(row)
-                        .append(",")
-                        .append(trafficValue)
-                        .append(",");
-            }
-        }
-
-        //vertical segments
-        for (int row = 0; row < height - 1; row++) {
-            for (int column = 0; column < width; column++) {
-                int trafficValue = rnd.nextInt(minTraffic, maxTraffic + 1);
-                traffic.append(column)
-                        .append(",")
-                        .append(row)
-                        .append(",")
-                        .append(column)
-                        .append(",")
-                        .append(row + 1)
-                        .append(",")
-                        .append(trafficValue)
-                        .append(",");
-            }
-        }
-        return traffic.toString();
-    }
-
     @Override
-    public String path(Strategy searchStrategy, GridObject start, GridObject goal) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'path'");
+    public NodePath path(Store start, Customer goal, Strategy searchStrategy, boolean visualize) {
+        if (visualize) {
+            grid.clearAllVisitedGridObjects();
+            return getVisualizedPathStartingFrom(start, goal, searchStrategy);
+        } else {
+            return getPathStartingFrom(start, goal, searchStrategy);
+        }
     }
 
     @Override
@@ -137,8 +47,33 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
         // Map search strategy
         Strategy searchStrategy = StrategyCode.valueOf(strategy.toUpperCase()).getStrategy();
 
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'plan'");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Store store : grid.getStores()) {
+            for (Customer customer : grid.getCustomers()) {
+                NodePath path;
+                if (searchStrategy instanceof IterativeDeepeningSearch) {
+                    path = iterativeDeepeningPath(store, customer, (IterativeDeepeningSearch) searchStrategy, visualize);
+                } else if (searchStrategy instanceof InformedSearchStrategy) {
+                    ((InformedSearchStrategy) searchStrategy).initializeWithGoal(customer);
+                    path = path(store, customer, searchStrategy, visualize);
+                } else {
+                    path = path(store, customer, searchStrategy, visualize);
+                }
+
+                if (path == null) {
+                    throw new RuntimeException("Invalid null path generated!");
+                }
+
+                stringBuilder
+                        .append(store.getCoords().x).append(",").append(store.getCoords().y).append(";")
+                        .append(customer.getCoords().x).append(",").append(customer.getCoords().y).append(";")
+                        .append(path).append(";").append(countNodesExpanded)
+                        .append("\n");
+                searchStrategy.reset();
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     private void setInitialState(String initialState){
@@ -198,8 +133,7 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
         for (String segment : segments) {
             String[] segmentValues = segment.split(",");
             int trafficValue = Integer.parseInt(segmentValues[4]);
-            if (trafficValue < 1)
-                continue; //do not add segment if traffic value is 0
+            if (trafficValue < 1) continue; //do not add segment if traffic value is 0
 
             Point source = new Point(Integer.parseInt(segmentValues[0]), Integer.parseInt(segmentValues[1]));
             Point destination = new Point(Integer.parseInt(segmentValues[2]), Integer.parseInt(segmentValues[3]));
@@ -207,5 +141,114 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
         }
     }
 
+    private String genInitialState(int m, int n){
+        Random rnd = new Random();
+        int p = rnd.nextInt(1, 11);
+        int s = rnd.nextInt(1, 4);
+        int noOfTunnels = rnd.nextInt(1, 4);
 
+        HashSet<Point> occupiedPositions = new HashSet<>();
+        occupiedPositions.add(new Point(0, 0));
+        String initialValues = m + ";" + n + ";" + p + ";" + s + ";";
+        //Customers
+        StringBuilder customerPositions = new StringBuilder();
+        for (int i = 0; i < p; i++) {
+            Point position = findUnoccupiedPosition(m, n, occupiedPositions);
+            occupiedPositions.add(position);
+            customerPositions.append(position.x).append(",").append(position.y).append(",");
+        }
+        customerPositions.deleteCharAt(customerPositions.length() - 1); //removes extra ',' at the end
+        customerPositions.append(";"); //adds ; instead to signify the end of customer input
+        //Stores
+        StringBuilder storePositions = new StringBuilder();
+        for (int i = 0; i < s; i++) {
+            Point position = findUnoccupiedPosition(m, n, occupiedPositions);
+            occupiedPositions.add(position);
+            storePositions.append(position.x).append(",").append(position.y).append(",");
+        }
+        storePositions.deleteCharAt(storePositions.length() - 1); //removes extra ',' at the end
+        storePositions.append(";"); //adds ; instead to signify the end of store input
+        //Tunnels
+        StringBuilder tunnelsPositions = new StringBuilder();
+        for (int i = 0; i < noOfTunnels; i++) {
+            Point position1 = findUnoccupiedPosition(m, n, occupiedPositions);
+            occupiedPositions.add(position1);
+            Point position2 = findUnoccupiedPosition(m, n, occupiedPositions);
+            occupiedPositions.add(position2);
+
+            tunnelsPositions.append(position1.x).append(",").append(position1.y).append(",");
+            tunnelsPositions.append(position2.x).append(",").append(position2.y).append(",");
+        }
+        tunnelsPositions.deleteCharAt(storePositions.length() - 1); //removes extra ',' at the end
+        tunnelsPositions.append(";"); //adds ; instead to signify the end of tunnel input
+
+        return initialValues + customerPositions + storePositions + tunnelsPositions;
+    }
+
+    private Point findUnoccupiedPosition(int width, int height, HashSet<Point> occupiedPositions){
+        Random rnd = new Random();
+        int x, y;
+        do {
+            x = rnd.nextInt(0, width);
+            y = rnd.nextInt(0, height);
+        } while (occupiedPositions.contains(new Point(x, y)));
+        return new Point(x, y);
+    }
+
+    private String genTraffic(int width, int height){
+        StringBuilder traffic = new StringBuilder();
+        int minTraffic = 0, maxTraffic = 4;
+        Random rnd = new Random();
+        //horizontal segments
+        for (int row = 0; row < height; row++) {
+            for (int column = 0; column < width - 1; column++) {
+                int trafficValue = rnd.nextInt(minTraffic, maxTraffic + 1);
+                traffic.append(column)
+                        .append(",")
+                        .append(row)
+                        .append(",")
+                        .append(column + 1)
+                        .append(",")
+                        .append(row)
+                        .append(",")
+                        .append(trafficValue)
+                        .append(",");
+            }
+        }
+
+        //vertical segments
+        for (int row = 0; row < height - 1; row++) {
+            for (int column = 0; column < width; column++) {
+                int trafficValue = rnd.nextInt(minTraffic, maxTraffic + 1);
+                traffic.append(column)
+                        .append(",")
+                        .append(row)
+                        .append(",")
+                        .append(column)
+                        .append(",")
+                        .append(row + 1)
+                        .append(",")
+                        .append(trafficValue)
+                        .append(",");
+            }
+        }
+        return traffic.toString();
+    }
+
+    private NodePath iterativeDeepeningPath(Store start, Customer goal, IterativeDeepeningSearch searchStrategy, boolean visualize) {
+        int gridNodes = grid.getSize();
+        int depth = 1;
+
+        while (depth < gridNodes) {
+            try {
+                searchStrategy.reset();
+                searchStrategy.setCurrentLevel(depth);
+                return path(start, goal, searchStrategy, visualize);
+            } catch (GoalNotFoundException e) {
+                depth++;
+            }
+        }
+
+        throw new GoalNotFoundException();
+    }
 }

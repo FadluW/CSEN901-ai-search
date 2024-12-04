@@ -1,11 +1,17 @@
 package de.giuberlin.search.strategies.comparators;
 
 import java.util.Comparator;
+
+import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.search.strategies.heuristics.Heuristic;
 import de.giuberlin.search.SearchNode;
 
 public class SearchNodeGreedyComparator1 implements Comparator<SearchNode>  {
-    SearchNode goal;
+    GridObject goal;
+
+    public SearchNodeGreedyComparator1(GridObject goal) {
+        this.goal = goal;
+    }
 
     @Override
     public int compare(SearchNode node1, SearchNode node2) { //compare  between h1 of node 1 and 2

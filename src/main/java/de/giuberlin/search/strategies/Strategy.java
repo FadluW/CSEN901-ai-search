@@ -7,4 +7,5 @@ public interface Strategy {
     public SearchNode dequeue();
     public void displayQueue();
     public boolean isInformed();
+    public void reset();
 }

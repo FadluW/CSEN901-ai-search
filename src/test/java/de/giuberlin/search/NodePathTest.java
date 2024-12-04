@@ -14,7 +14,7 @@ public class NodePathTest {
         NodePath testPath = new NodePath();
         testPath.add(Direction.DOWN);
         
-        assertThat(testPath.toString(), is("down;0;1"));
+        assertThat(testPath.toString(), is("down;0"));
     }
     
     @Test
@@ -25,7 +25,7 @@ public class NodePathTest {
         testPath.add(Direction.RIGHT);
         testPath.add(Direction.LEFT);
 
-        assertThat(testPath.toString(), is("down,up,right,left;0;4"));
+        assertThat(testPath.toString(), is("down,up,right,left;0"));
     }
     
     @Test
@@ -33,7 +33,7 @@ public class NodePathTest {
         NodePath testPath = new NodePath();
         testPath.add(Direction.RIGHT, 3);
 
-        assertThat(testPath.toString(), is("right;3;1"));
+        assertThat(testPath.toString(), is("right;3"));
     }
     
     @Test
@@ -44,17 +44,17 @@ public class NodePathTest {
         testPath.add(Direction.RIGHT, 1);
         testPath.add(Direction.LEFT, 1);
 
-        assertThat(testPath.toString(), is("down,up,right,left;8;4"));
+        assertThat(testPath.toString(), is("down,up,right,left;8"));
     }
 
     @Test
     public void shouldCloneAndAddWithoutAffectingReference() {
         NodePath original = new NodePath();
         original.add(Direction.RIGHT, 3);
-        assertThat(original.toString(), is("right;3;1"));
+        assertThat(original.toString(), is("right;3"));
 
         NodePath clone = original.clone().add(Direction.DOWN);
-        assertThat(original.toString(), is("right;3;1"));
-        assertThat(clone.toString(), is("right,down;3;2"));
+        assertThat(original.toString(), is("right;3"));
+        assertThat(clone.toString(), is("right,down;3"));
     }
 }
