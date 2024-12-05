@@ -19,8 +19,8 @@ public class SearchNodeAStarComparator2 implements Comparator<SearchNode>  {
         Heuristic node2H =new Heuristic(node2, goal);
 
         int costCompare = Long.compare(
-                node1.getPath().getCost() + node1H.getHeuristicVal2(),
-                node2.getPath().getCost()+ node2H.getHeuristicVal2());
+                node1.getPath().getCost() + node1H.getHeuristicManhattan(),
+                node2.getPath().getCost()+ node2H.getHeuristicManhattan());
 
         if (costCompare != 0) {
             return costCompare;

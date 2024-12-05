@@ -44,9 +44,9 @@ public abstract class GridObject {
         return Math.abs(this.coords.x - object2.coords.x) + Math.abs(this.coords.y - object2.coords.y);
     }
 
-    public int euclideanDistanceTo(GridObject object2) {
-        // TODO: return rounded euclidean distance
-        // ?: Should it be decimal?
-        return 0;
+    public double euclideanDistanceTo(GridObject object2) {
+        return Math.sqrt(
+                Math.pow(this.coords.x - object2.coords.x, 2) +
+                        Math.pow(this.coords.y - object2.coords.y, 2));
     }
 }

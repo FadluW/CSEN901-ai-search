@@ -19,7 +19,7 @@ public class SearchNodeGreedyComparator2 implements Comparator<SearchNode>  {
         Heuristic node1H = new Heuristic(node1, goal);
         Heuristic node2H = new Heuristic(node2, goal);
 
-        int costCompare = Long.compare(node1H.getHeuristicVal2(),  node2H.getHeuristicVal2());
+        int costCompare = Long.compare(node1H.getHeuristicManhattan(),  node2H.getHeuristicManhattan());
 
         if (costCompare != 0) {
             return costCompare;

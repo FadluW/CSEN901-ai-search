@@ -23,9 +23,7 @@ public class DeliverySearch extends GenericSearch implements DeliverySearchInter
         String initialState = genInitialState(width, height);
         String traffic = genTraffic(width, height);
 
-        // TODO check whether this method should return initialState or traffic
-        throw new UnsupportedOperationException("Unimplemented method 'GenGrid'");
-
+        return initialState + "-" + traffic;
     }
 
     @Override
