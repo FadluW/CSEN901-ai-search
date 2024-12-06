@@ -4,19 +4,19 @@ import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.search.SearchNode;
 
 public class Heuristic {
-    private final double HeuristicEuclidean;
-    private final int HeuristicManhattan;
+    private final SearchNode node;
+    private final GridObject goal;
 
     public Heuristic(SearchNode node, GridObject goal) {
-        HeuristicEuclidean = goal.euclideanDistanceTo(node.getGridObject());
-        HeuristicManhattan = goal.manhattanDistanceTo(node.getGridObject());
+        this.node = node;
+        this.goal = goal;
     }
 
-    public double getHeuristicEuclidean(){
-        return HeuristicEuclidean;
+    public double getHeuristicEuclidean() {
+        return goal.euclideanDistanceTo(node.getGridObject());
     }
 
     public int getHeuristicManhattan(){
-        return HeuristicManhattan;
+        return goal.manhattanDistanceTo(node.getGridObject());
     }
 }
