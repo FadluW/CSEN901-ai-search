@@ -3,9 +3,7 @@ package de.giuberlin;
 import de.giuberlin.exceptions.GoalNotFoundException;
 import de.giuberlin.grid.Grid;
 import de.giuberlin.grid.types.Customer;
-import de.giuberlin.grid.types.GridObject;
 import de.giuberlin.grid.types.Store;
-import de.giuberlin.grid.types.Tunnel;
 import de.giuberlin.search.NodePath;
 import de.giuberlin.search.strategies.InformedSearchStrategy;
 import de.giuberlin.search.strategies.IterativeDeepeningSearch;
@@ -13,7 +11,8 @@ import de.giuberlin.search.strategies.Strategy;
 import de.giuberlin.search.strategies.StrategyCode;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class DeliverySearch extends GenericSearch implements DeliverySearchInterface {
     @Override

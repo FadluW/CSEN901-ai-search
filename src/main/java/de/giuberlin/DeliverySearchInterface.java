@@ -4,7 +4,6 @@ import de.giuberlin.grid.types.Customer;
 import de.giuberlin.grid.types.Store;
 import de.giuberlin.search.NodePath;
 import de.giuberlin.search.strategies.Strategy;
-import de.giuberlin.grid.types.GridObject;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -31,7 +30,7 @@ public interface DeliverySearchInterface {
      * 
      * @return {@link de.giuberlin.search.NodePath NodePath}
      */
-    public NodePath path(Store start, Customer goal, Strategy searchStrategy, boolean visualize);
+    NodePath path(Store start, Customer goal, Strategy searchStrategy, boolean visualize);
     
     
     /**
@@ -43,13 +42,13 @@ public interface DeliverySearchInterface {
      * @param visualize Boolean to toggle displaying pathing in the console
      * @return String of pairs for each store and destination
      */
-    public String plan(
+    String plan(
         String initialState, 
         String traffic, 
         String strategy, 
         Boolean visualize);
 
-    private static String genInitialState(int m, int n){
+    static String genInitialState(int m, int n){
         Random rnd = new Random();
         int p = rnd.nextInt(1, 11);
         int s = rnd.nextInt(1, 4);

@@ -3,8 +3,6 @@ package de.giuberlin;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DeliveryPlannerTest {
 
     @Nested
@@ -14,7 +12,7 @@ class DeliveryPlannerTest {
 
         @Test
         void withGrid() {
-            DeliveryPlanner.withGrid(initialState, traffic).execute();
+            DeliveryPlanner.withGrid(initialState, traffic).measureAndExecute();
         }
     }
 }

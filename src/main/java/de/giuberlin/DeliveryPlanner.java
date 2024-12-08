@@ -3,6 +3,10 @@ package de.giuberlin;
 import de.giuberlin.search.strategies.StrategyCode;
 
 import java.awt.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -10,7 +14,7 @@ public class DeliveryPlanner {
     private final DeliverySearch deliverySearch;
     private final String initialState;
     private final String traffic;
-    private final String strategy;
+    private String strategy;
     private final boolean visualize;
 
     private static class PlanResult {
@@ -73,11 +77,32 @@ public class DeliveryPlanner {
         if (strategy != null) {
             parseAndDisplayPlanResult(planWithStrategy(strategy));
         }
-
-        Arrays.stream(StrategyCode.values())
+        else
+            Arrays.stream(StrategyCode.values())
                 .map(StrategyCode::toString)
                 .map(this::planWithStrategy)
                 .forEach(this::parseAndDisplayPlanResult);
+    }
+
+    public void measureAndExecute(){
+        for(StrategyCode code : StrategyCode.values()) {
+            System.gc();
+            long beforeUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+            threadMXBean.setThreadCpuTimeEnabled(true);
+            threadMXBean.setThreadContentionMonitoringEnabled(true);
+            Instant before = Instant.now();
+
+            this.strategy = code.toString();
+            execute();
+            Instant after = Instant.now();
+
+            long afterUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            long memoryUsed = afterUsedMemory - beforeUsedMemory;
+            System.out.println("Memory used: " + memoryUsed + " bytes");
+            System.out.println("Elapsed Time: "+ Duration.between(before, after).getNano() / 1000000 + " ms");
+            System.out.println();
+        }
     }
 
     public static DeliveryPlanner withRandomGrid() {
