@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class DeliveryPlanner {
-    private final DeliverySearch deliverySearch;
+    private DeliverySearch deliverySearch;
     private final String initialState;
     private final String traffic;
     private String strategy;
@@ -58,7 +58,6 @@ public class DeliveryPlanner {
     }
 
     private DeliveryPlanner(String initialState, String traffic, String strategy, boolean visualize) {
-        this.deliverySearch = new DeliverySearch();
         this.initialState = initialState;
         this.traffic = traffic;
         this.strategy = strategy;
@@ -66,7 +65,6 @@ public class DeliveryPlanner {
     }
 
     private DeliveryPlanner(String initialState, String traffic, boolean visualize) {
-        this.deliverySearch = new DeliverySearch();
         this.initialState = initialState;
         this.traffic = traffic;
         this.strategy = null;
@@ -91,8 +89,8 @@ public class DeliveryPlanner {
             ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
             threadMXBean.setThreadCpuTimeEnabled(true);
             threadMXBean.setThreadContentionMonitoringEnabled(true);
-            Instant before = Instant.now();
 
+            Instant before = Instant.now();
             this.strategy = code.toString();
             execute();
             Instant after = Instant.now();
@@ -116,6 +114,7 @@ public class DeliveryPlanner {
 
     private String planWithStrategy(String strategy) {
         System.out.println("Starting plan for strategy: " + strategy + "\n==============");
+        this.deliverySearch = new DeliverySearch();
         return this.deliverySearch.plan(initialState, traffic, strategy, visualize);
     }
 
