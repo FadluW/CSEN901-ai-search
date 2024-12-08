@@ -75,4 +75,8 @@ public abstract class GenericSearch {
             searchStrategy.enqueue(new SearchNode(nodeToExpand, countNodesVisited++, pathToNode, direction, cost));
         }
     }
+
+    public void displayGrid() {
+        grid.displayGrid();
+    }
 }
