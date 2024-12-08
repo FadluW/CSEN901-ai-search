@@ -17,45 +17,31 @@ public class DeliveryPlanner {
     private String strategy;
     private final boolean visualize;
 
-    private static class PlanResult {
-        final Point storePoint;
-        final Point customerPoint;
-        final String pathDetails;
-        final int nodesExpanded;
-        final int cost;
-
-        private PlanResult(Point storePoint, Point customerPoint, String pathDetails, int nodesExpanded, int cost) {
-            this.storePoint = storePoint;
-            this.customerPoint = customerPoint;
-            this.pathDetails = pathDetails;
-            this.nodesExpanded = nodesExpanded;
-            this.cost = cost;
-        }
-
+    private record PlanResult(Point storePoint, Point customerPoint, String pathDetails, int nodesExpanded, int cost) {
         public static PlanResult parse(String toParse) {
-            String[] planParts = toParse.split(";");
-            String[] storeXY = planParts[0].split(",");
-            String[] customerXY = planParts[1].split(",");
+                String[] planParts = toParse.split(";");
+                String[] storeXY = planParts[0].split(",");
+                String[] customerXY = planParts[1].split(",");
 
-            Point storePoint = new Point(Integer.parseInt(storeXY[0]), Integer.parseInt(storeXY[1]));
-            Point customerPoint = new Point(Integer.parseInt(customerXY[0]), Integer.parseInt(customerXY[1]));
-            String pathDetails = planParts[2];
-            int nodesExpanded = Integer.parseInt(planParts[4]);
-            int cost = Integer.parseInt(planParts[3]);
+                Point storePoint = new Point(Integer.parseInt(storeXY[0]), Integer.parseInt(storeXY[1]));
+                Point customerPoint = new Point(Integer.parseInt(customerXY[0]), Integer.parseInt(customerXY[1]));
+                String pathDetails = planParts[2];
+                int nodesExpanded = Integer.parseInt(planParts[4]);
+                int cost = Integer.parseInt(planParts[3]);
 
-            return new PlanResult(storePoint, customerPoint, pathDetails, nodesExpanded, cost);
+                return new PlanResult(storePoint, customerPoint, pathDetails, nodesExpanded, cost);
+            }
+
+            @Override
+            public String toString() {
+                return "Customer: (" + customerPoint.x + ", " + customerPoint.y + ")" +
+                        "\nStore: (" + storePoint.x + ", " + storePoint.y + ")" +
+                        "\nCost: " + cost +
+                        "\nRoute: " + pathDetails +
+                        "\nNodes Expanded: " + nodesExpanded +
+                        "\n";
+            }
         }
-
-        @Override
-        public String toString() {
-            return "Customer: (" + customerPoint.x + ", " + customerPoint.y + ")" +
-                    "\nStore: (" + storePoint.x + ", " + storePoint.y + ")" +
-                    "\nCost: " + cost +
-                    "\nRoute: " + pathDetails +
-                    "\nNodes Expanded: " + nodesExpanded +
-                    "\n";
-        }
-    }
 
     private DeliveryPlanner(String initialState, String traffic, String strategy, boolean visualize) {
         this.initialState = initialState;
@@ -64,52 +50,40 @@ public class DeliveryPlanner {
         this.visualize = visualize;
     }
 
-    private DeliveryPlanner(String initialState, String traffic, boolean visualize) {
-        this.initialState = initialState;
-        this.traffic = traffic;
-        this.strategy = null;
-        this.visualize = visualize;
-    }
-
     public void execute() {
         if (strategy != null) {
             parseAndDisplayPlanResult(planWithStrategy(strategy));
+            return;
         }
-        else
-            Arrays.stream(StrategyCode.values())
-                .map(StrategyCode::toString)
-                .map(this::planWithStrategy)
-                .forEach(this::parseAndDisplayPlanResult);
+
+        Arrays.stream(StrategyCode.values())
+            .map(StrategyCode::toString)
+            .map(this::planWithStrategy)
+            .forEach(this::parseAndDisplayPlanResult);
     }
 
-    public void measureAndExecute(){
+    public void measureAndExecute() {
+        if (this.strategy != null) {
+            measuredExecutionWithStrategy(this.strategy);
+            return;
+        }
+
         for(StrategyCode code : StrategyCode.values()) {
-            System.gc();
-            long beforeUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-            threadMXBean.setThreadCpuTimeEnabled(true);
-            threadMXBean.setThreadContentionMonitoringEnabled(true);
-
-            Instant before = Instant.now();
-            this.strategy = code.toString();
-            execute();
-            Instant after = Instant.now();
-
-            long afterUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            long memoryUsed = afterUsedMemory - beforeUsedMemory;
-            System.out.println("Memory used: " + memoryUsed + " bytes");
-            System.out.println("Elapsed Time: "+ Duration.between(before, after).getNano() / 1000000 + " ms");
-            System.out.println();
+            measuredExecutionWithStrategy(code.name());
         }
     }
 
     public static DeliveryPlanner withRandomGrid() {
        String[] gridString = DeliverySearchInterface.GenGrid().split("-");
-       return new DeliveryPlanner(gridString[0], gridString[1], false);
+       return withGridWithStrategy(gridString[0], gridString[1], null);
+    }
+
+    public static DeliveryPlanner withGridWithStrategy(String intialState, String traffic, StrategyCode strategyCode) {
+        return new DeliveryPlanner(intialState, traffic, strategyCode.name(), false);
     }
 
     public static DeliveryPlanner withGrid(String initialState, String traffic) {
-        return new DeliveryPlanner(initialState, traffic, false);
+        return withGridWithStrategy(initialState, traffic, null);
     }
 
     private String planWithStrategy(String strategy) {
@@ -135,5 +109,24 @@ public class DeliveryPlanner {
         }
 
         customerBestPlan.values().forEach(System.out::println);
+    }
+
+    private void measuredExecutionWithStrategy(String strategy) {
+        System.gc();
+        long beforeUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        threadMXBean.setThreadCpuTimeEnabled(true);
+        threadMXBean.setThreadContentionMonitoringEnabled(true);
+
+        Instant before = Instant.now();
+        this.strategy = strategy;
+        execute();
+        Instant after = Instant.now();
+
+        long afterUsedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long memoryUsed = afterUsedMemory - beforeUsedMemory;
+        System.out.println("Memory used: " + memoryUsed + " bytes");
+        System.out.println("Elapsed Time: "+ Duration.between(before, after).getNano() / 1000000 + " ms");
+        System.out.println();
     }
 }
