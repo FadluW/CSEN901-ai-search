@@ -1,4 +1,5 @@
 ## Description
+This project is an attempt to solve the delivery planner problem stated in the [project description](./description.pdf) as a part of our `Intro to Artificial Intelligence` course by the `German International University in Berlin`.
 
 ## Setting Up
 Prerequisites:
